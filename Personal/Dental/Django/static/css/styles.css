@@ -1,0 +1,232 @@
+:root {
+    --primary-color: #0056b3; /* 대표 파란색 */
+    --primary-color-dark: #0056b3; /* 어두운 파란색 */
+    --primary-color-light: #d6eaff; /* 연한 파란색 */
+}
+
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f9f9fb;
+    color: #333;
+}
+
+.container-fluid {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+button.btn-outline-secondary,
+.btn-outline-secondary:disabled {
+    /* margin-bottom: 2.5px; */
+    /* margin-top: 2.5px; */
+    margin: 2px;
+    color: #000000;
+    background-color: transparent;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* 테이블 행 호버 시 배경색 변경 */
+.table tbody tr:hover {
+    outline: 2px solid var(--primary-color); /* 아웃라인 추가 */
+    background-color: transparent; /* 배경색 제거 */
+    /* cursor: pointer; */
+}
+
+/* 테이블의 첫 번째 행에 대한 스타일 추가 */
+.table thead tr {
+    border-bottom: 2px solid var(--primary-color); /* 헤더 아래에 경계선 추가 */
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f7ff;
+    /* cursor: pointer; */
+}
+
+.table-body-wrapper {
+    /* height: 100%; */
+    overflow-y: auto;
+    max-height: 77vh;
+}
+
+.table-body-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-body-wrapper::-webkit-scrollbar-thumb {
+    background-color: #cccccc;
+    border-radius: 4px;
+}
+
+/* 테이블 헤더 고정 */
+.table-fixed-header th {
+    position: sticky;
+    top: 0;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    z-index: 1;
+}
+
+/* 카테고리 버튼 스타일 */
+.category-btn {
+    margin-bottom: 2.5px;
+    margin-top: 2.5px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 14px;
+}
+
+.category-btn:hover {
+    opacity: 0.8;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.btn.disabled,
+.btn:disabled,
+fieldset:disabled .btn {
+    pointer-events: none;
+    opacity: 1;
+    margin: 2px;
+}
+
+.table {
+    font-weight: bold;
+}
+
+/* 불완전 상병 코드 열 */
+.col-index {
+    width: 5%;
+    text-align: center;
+}
+
+/* 불완전 상병 코드 열 */
+.col-code {
+    width: 10%;
+    text-align: center;
+}
+
+/* 불완전 상병명 열 */
+.col-name {
+    width: 20%;
+    text-align: left;
+    word-break: break-all;
+    overflow-wrap: break-word;
+}
+
+/* 카테고리 열 */
+.col-category {
+    width: 20%;
+    text-align: left;
+}
+
+/* 세부 청구 항목 열 */
+.col-details {
+    width: 50%;
+    text-align: left;
+}
+
+/* 사이드메뉴 열고 닫기 버튼 */
+#toggle-sidebar {
+    position: absolute; /* 사이드바 내부에서 절대 위치 */
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 버튼에 그림자 추가 */
+    transition: right 0.3s ease; /* 사이드바 열리고 닫힐 때 부드럽게 이동 */
+}
+
+/* 기본 사이드바 설정 */
+#sidebar {
+    position: relative; /* 버튼을 사이드바 안에 배치할 수 있게 */
+    transition: width 0.3s ease; /* 너비 변경 애니메이션 */
+    width: 200px; /* 기본 열림 상태 너비 */
+    overflow-y: auto; /* 스크롤이 필요할 때만 나타남 */
+    max-height: 100vh; /* 사이드바가 화면 높이를 넘지 않도록 설정 */
+    background-color: #f8f9fa; /* 사이드바 배경색 */
+}
+
+#sidebar.collapsed {
+    width: 80px; /* 사이드바가 닫혔을 때 너비 */
+}
+
+/* 메인 콘텐츠 영역 설정 */
+#main-content {
+    transition: width 0.3s ease, margin-left 0.3s ease; /* 애니메이션 */
+    width: calc(100% - 400px); /* 사이드바가 열려 있을 때의 너비 */
+    overflow: hidden;
+}
+
+#main-content.expanded {
+    width: calc(100% - 80px); /* 사이드바가 닫혔을 때의 너비 */
+}
+
+/* row의 flex-wrap을 없애서 사이드바가 닫혀도 한 줄로 유지되도록 설정 */
+.container-fluid .row {
+    flex-wrap: nowrap;
+    overflow-x: hidden; /* 수평 스크롤 방지 */
+}
+
+
+
+/* Sidebar Styles */
+#sidebar {
+    background-color: #f8f9fa; /* Light background */
+    border-right: 1px solid #dee2e6; /* Subtle border */
+    padding: 15px; /* Padding for better spacing */
+    height: 100vh; /* Full height */
+}
+
+.category-title {
+    font-size: 1.25rem; /* Larger font size for the title */
+    margin-bottom: 10px; /* Spacing below the title */
+    font-weight: bold; /* Bold text */
+}
+
+.nav.flex-column {
+    list-style: none; /* Remove default list styling */
+    padding-left: 0; /* Remove default padding */
+}
+
+.nav.flex-column li {
+    margin-bottom: 5px; /* Space between items */
+}
+
+.major-category, .middle-category, .sub-category {
+    display: block; /* Make links block elements */
+    padding: 10px; /* Padding for clickable area */
+    color: #000000; /* Bootstrap primary color */
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth transition */
+    background-color: #f8f9fa;
+}
+
+.major-category:hover, .middle-category:hover, .sub-category:hover {
+    background-color: #e2e6ea; /* Change background on hover */
+}
+
+#toggle-sidebar {
+    margin-bottom: 15px; /* Space below the toggle button */
+}
+
+/* Add a custom style for the "Add" button */
+#add-button {
+    width: 100%; /* Full width */
+    margin-top: 20px; /* Space above */
+}

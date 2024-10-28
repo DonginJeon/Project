@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>감정 예측 챗봇</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .chat-container {
+        width: 100%;
+        max-width: 400px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .chat-header {
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        font-size: 20px;
+      }
+
+      .chat-box {
+        flex: 1;
+        padding: 10px;
+        overflow-y: auto;
+        background-color: #f4f4f4;
+        height: 300px;
+      }
+
+      .chat-message {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        max-width: 80%;
+      }
+
+      .user-message {
+        background-color: #DCF8C6;
+        align-self: flex-end;
+        text-align: right;
+      }
+
+      .bot-message {
+        background-color: #ECECEC;
+        align-self: flex-start;
+      }
+
+      .chat-input {
+        display: flex;
+        border-top: 1px solid #ddd;
+        padding: 10px;
+        background-color: #fff;
+      }
+
+      .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+
+      .chat-input button {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .chat-input button:disabled {
+        background-color: #ccc;
+      }
+
+      /* 스크롤바 스타일 */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f4f4f4;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: #4CAF50;
+        border-radius: 10px;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .chat-container {
+          width: 100%;
+          max-width: 100%;
+        }
+
+        .chat-header {
+          font-size: 18px;
+        }
+
+        .chat-box {
+          height: 400px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="chat-container">
+      <div class="chat-header">
+        <i class="fas fa-robot"></i>
+        감정 예측 챗봇
+      </div>
+      <div id="chat-box" class="chat-box">
+        <!-- 대화 내용이 여기 추가됩니다 -->
+      </div>
+      <div class="chat-input">
+        <input type="text" id="user-input" placeholder="대화를 입력하세요" onkeydown="if(event.key === 'Enter') sendMessage();">
+        <button onclick="sendMessage()">보내기</button>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      function sendMessage() {
+        var userMessage = $("#user-input").val();
+        if (userMessage.trim() === '') 
+          return;
+        
+        $("#chat-box").append('<div class="chat-message user-message"><b>나:</b> ' + userMessage + '</div>');
+        $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+
+        $.ajax({
+          type: "POST",
+          url: "/chat",
+          data: {
+            'message': userMessage
+          },
+          success: function (response) {
+            if (response.emotion) {
+              $("#chat-box").append('<div class="chat-message bot-message"><b>챗봇:</b> 감정: ' + response.emotion + '</div>');
+              $("#chat-box").append('<div class="chat-message bot-message">' + response.song_recommendation + '</div>');
+            } else if (response.message) {
+              $("#chat-box").append('<div class="chat-message bot-message"><b>챗봇:</b> ' + response.message + '</div>');
+            }
+            $("#chat-box").scrollTop($("#chat-box")[0].scrollHeight);
+          }
+        });
+        $("#user-input").val('');
+      }
+    </script>
+
+  </body>
+
+</html>
