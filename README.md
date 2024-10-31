@@ -2,7 +2,7 @@
 
 ---
 
-- AWS-IRT 기능 구현 프로젝트
+- AWS를 활용하여 IRT-CAT 기능 구현 프로젝트
 
   - [요약]
 
@@ -28,15 +28,11 @@
 
 - Okt를 활용한 한국어 품사 문법 퀴즈 생성기
 
-  - [요약](./Chunjae/Grammar_Quiz_0925/README.md)
+  - [요약](./Chunjae/Grammar_Quiz/README.md)
 
 - 말, 사람 사진 구분 CNN 모델
 
   - [요약](./Chunjae/Horse_Human_Classification_model/README.md)
-
-- 초등학생수학 문제 분류 및 라벨링 시스템
-
-  - [요약](./Chunjae/Lecture_matching_0912/README.md)
 
 ### 대학교 프로젝트
 
