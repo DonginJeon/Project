@@ -2,27 +2,37 @@ import json
 import pymysql
 
 def lambda_handler(event, context):
-    # 요청으로부터 학생 ID 수신
     student_id = event['student_id']
-    initial_theta = 0.0  # 초기 θ 값 설정
+    initial_theta = 0.0  # 초기 세타 값
 
-    # MariaDB에 연결
-    conn = pymysql.connect(
-        host="YOUR_RDS_ENDPOINT",
-        user="YOUR_USERNAME",
-        password="YOUR_PASSWORD",
-        db="IRT_Database",
+    # RDS 및 EC2 DB 연결
+    conn_rds = pymysql.connect(
+        host="irt-cat-db.cfsgom2iusui.ap-northeast-2.rds.amazonaws.com",
+        user="admin",
+        password="admin1234",
+        db="irt_cat_db",
         port=3306
     )
-    cursor = conn.cursor()
-    
-    # 초기 θ 값을 `pre_info` 테이블에 저장
-    cursor.execute("INSERT INTO pre_info (student_id, initial_theta) VALUES (%s, %s)", (student_id, initial_theta))
-    # 초기 θ 값을 `student_theta` 테이블에도 저장하여 추후 업데이트에 사용
-    cursor.execute("INSERT INTO student_theta (student_id, theta_value) VALUES (%s, %s)", (student_id, initial_theta))
-    
-    conn.commit()
-    conn.close()
+    cursor_rds = conn_rds.cursor()
+
+    conn_ec2 = pymysql.connect(
+        host="54.180.248.114",
+        user="root",
+        password="1234",
+        db="theta_db",
+        port=3306
+    )
+    cursor_ec2 = conn_ec2.cursor()
+
+
+    # 초기 세타 값 저장
+    cursor_rds.execute("INSERT INTO student_theta (student_id, theta_value) VALUES (%s, %s)", (student_id, initial_theta))
+    cursor_ec2.execute("INSERT INTO student_theta (student_id, theta_value) VALUES (%s, %s)", (student_id, initial_theta))
+
+    conn_rds.commit()
+    conn_rds.close()
+    conn_ec2.commit()
+    conn_ec2.close()
 
     return {
         "statusCode": 200,

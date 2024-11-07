@@ -2,50 +2,45 @@ import json
 import pymysql
 
 def lambda_handler(event, context):
-    # 요청으로부터 학생 ID 수신
     student_id = event['student_id']
-    
-    # MariaDB에 연결
-    conn = pymysql.connect(
-        host="YOUR_RDS_ENDPOINT",
-        user="YOUR_USERNAME",
-        password="YOUR_PASSWORD",
-        db="IRT_Database",
+
+    # RDS 연결
+    conn_rds = pymysql.connect(
+        host="irt-cat-db.cfsgom2iusui.ap-northeast-2.rds.amazonaws.com",
+        user="admin",
+        password="admin1234",
+        db="irt_cat_db",
         port=3306
     )
-    cursor = conn.cursor()
-    
-    # 응답 횟수 조회
-    cursor.execute("SELECT COUNT(*) FROM student_responses WHERE student_id = %s", (student_id,))
-    response_count = cursor.fetchone()[0]
-    
-    # θ 값 조회
-    cursor.execute("SELECT theta_value FROM student_theta WHERE student_id = %s", (student_id,))
-    current_theta = cursor.fetchone()[0]
-    
-    # 종료 조건 체크 (예: 응답 수가 10 이상이거나 θ 값이 특정 기준에 도달했는지)
-    if response_count >= 10 or abs(current_theta) >= 2.5:
-        status = "검사 종료"
-        final_theta = current_theta
-    else:
-        status = "검사 진행 중"
-        final_theta = None
-    
-    conn.close()
+    cursor_rds = conn_rds.cursor()
 
-    # 종료 상태에 따른 응답
-    if status == "검사 종료":
-        return {
-            "statusCode": 200,
-            "body": json.dumps({
-                "status": status,
-                "final_theta": final_theta
-            })
-        }
-    else:
-        return {
-            "statusCode": 200,
-            "body": json.dumps({
-                "status": status
-            })
-        }
+    conn_ec2 = pymysql.connect(
+        host="54.180.248.114",
+        user="root",
+        password="1234",
+        db="theta_db",
+        port=3306
+    )
+    cursor_ec2 = conn_ec2.cursor()
+
+    cursor_ec2.execute("SELECT theta_value FROM student_theta WHERE student_id = %s ORDER BY timestamp DESC LIMIT 1", (student_id,))
+    final_theta = cursor_ec2.fetchone()[0]
+
+    # 종료 조건 확인 (예: 응답 수가 10개 이상이면 종료)
+    cursor_rds.execute("SELECT COUNT(*) FROM student_responses WHERE student_id = %s", (student_id,))
+    response_count = cursor_rds.fetchone()[0]
+    
+    status = "검사 진행 중"
+    if response_count >= 10:  # 종료 조건 충족 시
+        status = "검사 종료"
+        cursor_rds.execute("UPDATE student_theta SET theta_value = %s WHERE student_id = %s", (final_theta, student_id))
+        conn_rds.commit()
+
+    # 연결 종료
+    conn_rds.close()
+    conn_ec2.close()
+
+    return {
+        "statusCode": 200,
+        "body": json.dumps({"status": status, "final_theta": final_theta if status == "검사 종료" else None})
+    }
