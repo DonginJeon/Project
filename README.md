@@ -20,7 +20,7 @@
 
 - 감정 예측 및 노래 추천 챗봇
 
-  - [요약](./Chunjae/Grammar_Quiz/README.md)
+  - [요약](./Chunjae/감정예측%20및%20노래%20추천%20챗봇/Report.md)
 
 - sentence_transformers를 활용한 영어 행맨 문법 퀴즈 생성기
 
