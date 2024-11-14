@@ -6,10 +6,10 @@ def lambda_handler(event, context):
 
     # EC2 DB 연결
     conn = pymysql.connect(
-        host="54.180.248.114",
-        user="root",
-        password="1234",
-        db="theta_db",
+        host="",
+        user="",
+        password="",
+        db="",
         port=3306
     )
     cursor = conn.cursor()

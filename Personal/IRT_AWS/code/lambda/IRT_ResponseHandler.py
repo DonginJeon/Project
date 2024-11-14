@@ -37,11 +37,11 @@ def lambda_handler(event, context):
 
     # RDS DB 연결
     conn_rds = pymysql.connect(
-        host="final-theta-db.cfsgom2iusui.ap-northeast-2.rds.amazonaws.com",
-        user="admin",
-        password="admin1234",
-        db="irt_cat_db",
-        port=3306
+        host="",
+        user="",
+        password="",
+        db="",
+        port= ""
     )
     cursor = conn_rds.cursor()
 
