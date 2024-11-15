@@ -255,6 +255,10 @@ P(X_i = 1 \mid \theta_i, a) = \frac{1}{1 + e^{-(\theta_i - a)}}
 $$
 
 $$
+P(X_i = 0 | \theta_i, \alpha) = 1 - \frac{1}{1 + e^{-(\theta_i - \alpha)}} = \frac{e^{-(\theta_i - \alpha)}}{1 + e^{-(\theta_i - \alpha)}}
+$$
+
+$$
 X_i = 1 : 학생 \, i \, 가 \, 문제를 \, 맞춘 \, 경우 \\
 X_i = 0 : 학생 \, i \, 가 \, 문제를 \, 틀린 \, 경우
 $$
