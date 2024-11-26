@@ -1,6 +1,6 @@
 # 보험상병명 검색엔진 프로젝트 보고서
 
-## [서비스 링크](oasis4dent.com)
+## [서비스 링크](https://oasis4dent.com/)
 
 ## 느낀점
 
